@@ -1,0 +1,12 @@
+<mat-card>
+  <mat-card-content>
+    <mat-card-header class="app-accent" layout="row">
+    <img src="../../../assets/images/logo.jpg" class="logo-image">
+    </mat-card-header>
+    <mat-list flex>
+      <app-vendor-list [vendors]="vendors">
+      </app-vendor-list>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
+<p class="footer-message">{{ msg }}</p>

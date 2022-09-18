@@ -1,1 +1,43 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// custom theme
+@import "custom-theme.scss";
+.my-primary-text {
+  color: mat-color($my-app-primary);
+}
+.my-accent-text {
+  color: mat-color($my-app-accent);
+}
+.margin-right-2 {
+  margin-right: 2vw !important;
+}
+
+mat-list-item:nth-child(odd) {
+  background-color: white;
+}
+mat-list-item:nth-child(even) {
+  background-color: #eeeeee;
+}
+
+.logo-image{
+    width: 50%;
+    margin: 0 auto;
+}
+
+.footer-message{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2rem;
+    text-align: center;
+    color: brown;
+}
