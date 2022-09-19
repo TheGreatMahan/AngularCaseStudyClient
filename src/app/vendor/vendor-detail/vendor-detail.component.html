@@ -1,0 +1,67 @@
+<form [formGroup]="vendorForm" (ngSubmit)="updateSelectedVendor()" class="form">
+  <div layout="row">
+    <mat-form-field>
+      <input matInput placeholder="Name" type="text" required formControlName="name" autofocus>
+    </mat-form-field>
+  </div>
+  <div layout="row">
+    <mat-form-field>
+      <input matInput placeholder="Email" type="email" required formControlName="email">
+    </mat-form-field>
+  </div>
+  <div layout="row">
+    <mat-form-field>
+      <input matInput placeholder="Phone #" type="text" required formControlName="phone">
+    </mat-form-field>
+  </div>
+  <div layout="row">
+    <mat-form-field>
+      <input matInput placeholder="Street Address" type="text" required formControlName="address1">
+    </mat-form-field>
+  </div>
+  <div layout="row">
+    <mat-form-field>
+      <input matInput placeholder="City" type="text" required formControlName="city">
+    </mat-form-field>
+  </div>
+  <div layout="row">
+    <mat-form-field>
+      <mat-select matInput placeholder="Province" formControlName="province" flex>
+        <mat-option value="On">Ontario</mat-option>
+        <mat-option value="Qu">Quebec</mat-option>
+        <mat-option value="Ab">Alberta</mat-option>
+        <mat-option value="BC">British Columbia</mat-option>
+        <mat-option value="MB">Manitoba</mat-option>
+        <mat-option value="SK">Saskatchewan</mat-option>
+        <mat-option value="YT">Yukon</mat-option>
+        <mat-option value="NT">Northwest Territories</mat-option>
+        <mat-option value="NU">Nunavut</mat-option>
+        <mat-option value="NB">New Brunswick</mat-option>
+        <mat-option value="NL">Newfoundland and Labrador</mat-option>
+        <mat-option value="NS">Nova Scotia</mat-option>
+        <mat-option value="PE">Prince Edward Island</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div layout="row">
+    <mat-form-field>
+      <input matInput placeholder="Postal Code" type="text" maxlength="8" required formControlName="postalcode">
+    </mat-form-field>
+  </div>
+  <div layout="row">
+    <mat-form-field>
+      <mat-select placeholder="Vendor Type" formControlName="type" flex>
+        <mat-option value="Trusted">Trusted</mat-option>
+        <mat-option value="Untrusted">Untrusted</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="mat-pad-sm">
+    <span>
+      <button mat-raised-button type="submit" class="save">Save</button>
+    </span>
+    <span>
+      <button mat-raised-button type="button" class="cancel" (click)="cancelled.emit(selectedVendor)">Cancel</button>
+    </span>
+  </div>
+</form>
