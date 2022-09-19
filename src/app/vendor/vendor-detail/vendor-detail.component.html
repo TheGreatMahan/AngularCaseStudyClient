@@ -61,6 +61,10 @@
       <button mat-raised-button type="submit" class="save">Save</button>
     </span>
     <span>
+      <button class="delete" *ngIf="selectedVendor.id" mat-raised-button type="button"
+        (click)="deleted.emit(selectedVendor)">Delete</button>
+    </span>
+    <span>
       <button mat-raised-button type="button" class="cancel" (click)="cancelled.emit(selectedVendor)">Cancel</button>
     </span>
   </div>

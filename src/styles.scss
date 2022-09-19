@@ -42,14 +42,14 @@ mat-list-item:nth-child(even) {
   color: brown;
 }
 
-.form > div > mat-form-field{
+.form > div > mat-form-field {
   width: 80%;
   margin-left: 10%;
 }
 
-.mat-pad-sm{
+.mat-pad-sm {
   text-align: center;
-  width: 50%;
+
   margin: 0 auto;
 }
 
@@ -57,15 +57,31 @@ mat-list-item:nth-child(even) {
   margin: 3%;
 }
 
-.save{
+.save {
   background-color: rgb(69, 255, 75);
-  width: 40%;
+  width: 25%;
   margin: 0 20px;
 }
 
-.cancel{
+.delete{
   background-color: mat-color($my-app-warn);
-  width: 40%;
+  width: 25%;
   margin: 0 20px;
 }
 
+.cancel {
+  background-color: rgb(111, 111, 255);
+  width: 25%;
+  margin: 0 20px;
+}
+
+.padtop15 {
+  padding-top: 15vh;
+}
+.material-icons.addicon {
+  font-size: 15vw;
+  position: absolute;
+  bottom: 5vh;
+  right: 5vw;
+  padding: 10vw;
+}

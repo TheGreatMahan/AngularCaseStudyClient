@@ -36,6 +36,24 @@ export class VendorService {
       .put<Vendor>(`${this.resourceURL}`, vendor)
       .pipe(retry(1), catchError(this.handleError));
   } // update
+  /**
+   * add an vendor on the server via POST, return Observable
+   */
+  add(vendor: Vendor): Observable<Vendor> {
+    vendor.id = 0;
+    return this.http
+      .post<Vendor>(this.resourceURL, vendor)
+      .pipe(retry(1), catchError(this.handleError));
+  } // add
+
+  /**
+   * delete an vendor on the server, return Observable
+   */
+  delete(id: number): Observable<number> {
+    return this.http
+      .delete<number>(`${this.resourceURL}/${id}`)
+      .pipe(retry(1), catchError(this.handleError));
+  } // delete
 
   // Error handling
   handleError(error: any) {

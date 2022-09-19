@@ -12,7 +12,6 @@ export class VendorHomeComponent implements OnInit {
   vendor: Vendor;
   hideEditForm: boolean;
   todo: string;
-  initialLoad: boolean;
   constructor(public vendorService: VendorService) {
     this.vendor = {
       id: 0,
@@ -27,19 +26,10 @@ export class VendorHomeComponent implements OnInit {
     };
     this.msg = '';
     this.hideEditForm = true;
-    this.initialLoad = true;
     this.todo = '';
   } // constructor
   ngOnInit(): void {
-    this.msg = 'loading vendors from server...';
-    (this.vendors$ = this.vendorService.get().pipe(
-      tap(() => {
-        if (this.initialLoad) {
-          this.msg = 'vendors loaded!';
-          this.initialLoad = false;
-        }
-      })
-    )),
+    (this.vendors$ = this.vendorService.get()),
       catchError((err) => (this.msg = err.message));
   } // ngOnInit
   select(vendor: Vendor): void {
@@ -66,4 +56,57 @@ export class VendorHomeComponent implements OnInit {
       complete: () => (this.hideEditForm = !this.hideEditForm),
     });
   } // update
+  /**
+   * save - determine whether we're doing and add or an update
+   */
+  save(vendor: Vendor): void {
+    vendor.id ? this.update(vendor) : this.add(vendor);
+  } // save
+  /**
+   * add - send vendor to service, receive new vendor back
+   */
+  add(vendor: Vendor): void {
+    vendor.id = 0;
+    this.vendorService.add(vendor).subscribe({
+      // Create observer object
+      next: (emp: Vendor) => {
+        this.msg = `Vendor ${emp.id} added!`;
+      },
+      error: (err: Error) =>
+        (this.msg = `Vendor not added! - ${err.message}`),
+      complete: () => (this.hideEditForm = !this.hideEditForm),
+    });
+  } // add
+  /**
+   * delete - send vendor id to service for deletion
+   */
+  delete(vendor: Vendor): void {
+    this.vendorService.delete(vendor.id).subscribe({
+      // Create observer object
+      next: (numOfVendorsDeleted: number) => {
+        numOfVendorsDeleted === 1
+          ? (this.msg = `Vendor ${vendor.name} deleted!`)
+          : (this.msg = `vendor not deleted`);
+      },
+      error: (err: Error) => (this.msg = `Delete failed! - ${err.message}`),
+      complete: () => (this.hideEditForm = !this.hideEditForm),
+    });
+  } // delete
+  /**
+   * newVendor - create new vendor instance
+   */
+  newVendor(): void {
+    this.vendor = {
+      id: 0,
+      name: '',
+      address1: '',
+      city: '',
+      province: '',
+      postalcode: '',
+      phone:'',
+      type:'',
+      email:''
+    };
+    this.hideEditForm = !this.hideEditForm;
+  } // newVendor
 } // VendorHomeComponent

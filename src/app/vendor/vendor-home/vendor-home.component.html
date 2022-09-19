@@ -10,12 +10,18 @@
   </mat-card-content>
   <ng-template #loading class="my-primary-text">Loading Vendors from server...</ng-template>
 </mat-card>
+<div class="pad5" *ngIf="hideEditForm">
+  <mat-icon (click)="newVendor()" matTooltip="Add New Vendor" class="addicon" color="primary">
+    control_point
+  </mat-icon>
+</div>
+
 <mat-card *ngIf="!hideEditForm">
   <mat-card-header>
   </mat-card-header>
   <mat-card-content>
-    <app-vendor-detail [selectedVendor]="vendor" (cancelled)="cancel('cancelled')" (saved)="update($event)">
-    </app-vendor-detail>
+    <app-vendor-detail [selectedVendor]="vendor" (cancelled)="cancel('cancelled')" (saved)="save($event)"
+      (deleted)="delete($event)"></app-vendor-detail>
   </mat-card-content>
 </mat-card>
 <p class="footer-message">{{ msg }}</p>
