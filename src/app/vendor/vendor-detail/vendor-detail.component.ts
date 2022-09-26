@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
-import { Vendor } from '../vendor';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Vendor } from '@app/vendor/vendor';
+import { ValidatePhone } from '@app/validators/phoneno.validator';
+import { ValidatePostalCode } from '@app/validators/postalcode.validator';
 @Component({
   selector: 'app-vendor-detail',
   templateUrl: './vendor-detail.component.html',
@@ -31,14 +33,14 @@ export class VendorDetailComponent implements OnInit {
   type: FormControl;
   email:FormControl;
   constructor(private builder: FormBuilder) {
-    this.name = new FormControl('');
-    this.address1 = new FormControl('');
-    this.city = new FormControl('');
-    this.province = new FormControl('');
-    this.postalcode = new FormControl('');
-    this.phone = new FormControl('');
-    this.type = new FormControl('');
-    this.email = new FormControl('');
+    this.name = new FormControl('', Validators.compose([Validators.required]));
+    this.address1 = new FormControl('', Validators.compose([Validators.required]));
+    this.city = new FormControl('', Validators.compose([Validators.required]));
+    this.province = new FormControl('', Validators.compose([Validators.required]));
+    this.postalcode = new FormControl('', Validators.compose([Validators.required, ValidatePostalCode]));
+    this.phone = new FormControl('', Validators.compose([Validators.required, ValidatePhone]));
+    this.type = new FormControl('', Validators.compose([Validators.required]));
+    this.email = new FormControl('', Validators.compose([Validators.required, Validators.email]));
     this.vendorForm = new FormGroup({
       name: this.name,
       address1: this.address1,

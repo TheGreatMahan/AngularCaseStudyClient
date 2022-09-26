@@ -2,26 +2,42 @@
   <div layout="row">
     <mat-form-field>
       <input matInput placeholder="Name" type="text" required formControlName="name" autofocus>
+      <mat-error *ngIf="name.errors && (name.dirty || name.touched)" align="end"> Vendor Name is required
+      </mat-error>
     </mat-form-field>
   </div>
   <div layout="row">
     <mat-form-field>
       <input matInput placeholder="Email" type="email" required formControlName="email">
+      <mat-error *ngIf="email.errors && (email.dirty || email.touched)" align="end">
+        <p *ngIf="email.hasError('required')">Email is required.</p>
+        <p *ngIf="!email.hasError('required') && email.hasError('email')">format must be-
+          xx@xx.xx</p>
+      </mat-error>
     </mat-form-field>
   </div>
   <div layout="row">
     <mat-form-field>
       <input matInput placeholder="Phone #" type="text" required formControlName="phone">
+      <mat-error *ngIf="phone.errors && (phone.dirty || phone.touched)" align="end">
+        <p *ngIf="phone.hasError('required')">Phone# is required.</p>
+        <p *ngIf="!phone.hasError('required') && phone.hasError('invalidPhone')">format must be-
+          (###)###-####</p>
+      </mat-error>
     </mat-form-field>
   </div>
   <div layout="row">
     <mat-form-field>
       <input matInput placeholder="Street Address" type="text" required formControlName="address1">
+      <mat-error *ngIf="address1.errors && (address1.dirty || address1.touched)" align="end"> Address is required
+      </mat-error>
     </mat-form-field>
   </div>
   <div layout="row">
     <mat-form-field>
       <input matInput placeholder="City" type="text" required formControlName="city">
+      <mat-error *ngIf="city.errors && (city.dirty || city.touched)" align="end"> City is required
+      </mat-error>
     </mat-form-field>
   </div>
   <div layout="row">
@@ -41,11 +57,18 @@
         <mat-option value="NS">Nova Scotia</mat-option>
         <mat-option value="PE">Prince Edward Island</mat-option>
       </mat-select>
+      <mat-error *ngIf="province.errors && (province.dirty || province.touched)" align="end"> Province is required
+      </mat-error>
     </mat-form-field>
   </div>
   <div layout="row">
     <mat-form-field>
       <input matInput placeholder="Postal Code" type="text" maxlength="8" required formControlName="postalcode">
+      <mat-error *ngIf="postalcode.errors && (postalcode.dirty || postalcode.touched)" align="end">
+        <p *ngIf="postalcode.hasError('required')">Postal Code is required.</p>
+        <p *ngIf="!postalcode.hasError('required') && postalcode.hasError('invalidPostalCode')">format must be-
+          X#X-#X#</p>
+      </mat-error>
     </mat-form-field>
   </div>
   <div layout="row">
@@ -54,6 +77,8 @@
         <mat-option value="Trusted">Trusted</mat-option>
         <mat-option value="Untrusted">Untrusted</mat-option>
       </mat-select>
+      <mat-error *ngIf="type.errors && (type.dirty || type.touched)" align="end"> Vendor Type is required
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="mat-pad-sm">
