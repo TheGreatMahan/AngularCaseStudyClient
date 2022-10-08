@@ -29,7 +29,7 @@ mat-list-item:nth-child(even) {
 }
 
 .logo-image {
-  width: 50%;
+  width: 20%;
   margin: 0 auto;
 }
 
@@ -42,7 +42,7 @@ mat-list-item:nth-child(even) {
   color: brown;
 }
 
-.form > div > mat-form-field {
+.form > div > mat-form-field{
   width: 80%;
   margin-left: 10%;
 }
@@ -84,4 +84,34 @@ mat-list-item:nth-child(even) {
   bottom: 5vh;
   right: 5vw;
   padding: 10vw;
+}
+
+table {
+  width: 100%;
+}
+.center-header {
+  flex-direction: column;
+  justify-content: center;
+  font-weight: bolder;
+  margin-left: 25px;
+}
+.mat-cell {
+  text-align: center;
+  justify-content: center;
+}
+.mat-row:nth-child(odd) {
+  background-color: #eeeeee;
+  text-align: center;
+}
+.mat-row.ng-star-inserted:nth-child(even) {
+  background-color: white;
+  text-align: center;
+}
+button.mat-sort-header-button {
+  margin-left: 5vw;
+}
+
+div > mat-form-field {
+  width:90%;
+  margin-left:5%;
 }

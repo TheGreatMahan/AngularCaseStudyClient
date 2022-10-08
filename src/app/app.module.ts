@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatComponentsModule } from './mat-components/mat-components.module';
 import { HomeComponent } from './home/home.component';
 import { VendorModule } from './vendor/vendor.module';
+import { ProductModule } from './product/product.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { VendorModule } from './vendor/vendor.module';
     MatComponentsModule,
     HttpClientModule,
     VendorModule,
+    ProductModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

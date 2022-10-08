@@ -12,6 +12,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const MaterialComponents = [
   MatButtonModule,
@@ -25,6 +28,9 @@ const MaterialComponents = [
   MatOptionModule,
   MatSelectModule,
   MatTooltipModule,
+  MatTableModule,
+  MatSortModule,
+  MatExpansionModule,
 ];
 @NgModule({
   declarations: [],
