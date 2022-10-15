@@ -10,6 +10,7 @@ import { MatComponentsModule } from './mat-components/mat-components.module';
 import { HomeComponent } from './home/home.component';
 import { VendorModule } from './vendor/vendor.module';
 import { ProductModule } from './product/product.module';
+import { PurchaseOrderModule } from './purchase-order/purchase-order.module'
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ProductModule } from './product/product.module';
     HttpClientModule,
     VendorModule,
     ProductModule,
+    PurchaseOrderModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
