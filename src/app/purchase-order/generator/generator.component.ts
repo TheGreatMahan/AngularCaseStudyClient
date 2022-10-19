@@ -9,6 +9,8 @@ import { PurchaseOrder } from '@app/purchase-order/purchase-order';
 import { VendorService } from '@app/vendor/vendor.service';
 import { ProductService } from '@app/product/product.service';
 import { PurchaseOrderService } from '@app/purchase-order/purchase-order.service';
+import { PDFURL } from '@app/constants';
+
 @Component({
   selector: 'app-generator',
   templateUrl: './generator.component.html',
@@ -22,39 +24,41 @@ export class GeneratorComponent implements OnInit, OnDestroy {
   qtyVal: FormControl;
   // data
   formSubscription?: Subscription;
-  products$?: Observable<Product[]>; 
-  vendors$?: Observable<Vendor[]>; 
-  vendorproducts$?: Observable<Product[]>; 
+  products$?: Observable<Product[]>;
+  vendors$?: Observable<Vendor[]>;
+  vendorproducts$?: Observable<Product[]>;
   items: Array<PurchaseOrderLineItem>;
   selectedproducts: Product[];
-  selectedProduct: Product; 
-  selectedVendor: Vendor; 
+  selectedProduct: Product;
+  selectedVendor: Vendor;
   qtyOptions: Array<Number>;
 
-  pickedProduct: boolean;
-  pickedVendor: boolean;
-  pickedQuantity: boolean;
+  chosenProduct: boolean;
+  chosenVendor: boolean;
+  chosenQuantity: boolean;
   generated: boolean;
   hasProducts: boolean;
   msg: string;
   total: number;
-  reportno: number = 0;
+  purchaseOrderNumber: number = 0;
   tax: number = 0.13;
   subWithTax: number;
   sub: number;
   poid: number = 0;
   resetSelection: number;
   qty: number;
+  showVendor: boolean;
   constructor(
     private builder: FormBuilder,
     private vendorService: VendorService,
     private productService: ProductService,
     private PurchaseOrderService: PurchaseOrderService
   ) {
-    this.pickedVendor = false;
-    this.pickedProduct = false;
+    this.showVendor = true;
+    this.chosenVendor = false;
+    this.chosenProduct = false;
     this.generated = false;
-    this.pickedQuantity = false;
+    this.chosenQuantity = false;
     this.msg = '';
     this.vendorid = new FormControl('');
     this.productid = new FormControl('');
@@ -100,9 +104,9 @@ export class GeneratorComponent implements OnInit, OnDestroy {
   } // constructor
 
   ngOnInit(): void {
-    this.onPickVendor();
-    this.onPickProduct();
-    this.onPickQuantity();
+    this.onChooseVendor();
+    this.onChooseProduct();
+    this.onChooseQuantity();
     this.msg = 'loading vendors and products from the server...';
     (this.vendors$ = this.vendorService.get()),
       catchError((err) => (this.msg = err.message));
@@ -115,11 +119,7 @@ export class GeneratorComponent implements OnInit, OnDestroy {
       this.formSubscription.unsubscribe();
     }
   } // ngOnDestroy
-  /**
-   * onPickVendor - Another way to use Observables, subscribe to the select change event
-   * then load specific vendor products for subsequent selection
-   */
-  onPickVendor(): void {
+  onChooseVendor(): void {
     this.formSubscription = this.generatorForm
       .get('vendorid')
       ?.valueChanges.subscribe((val) => {
@@ -138,21 +138,17 @@ export class GeneratorComponent implements OnInit, OnDestroy {
         };
         this.selectedVendor = val;
         this.loadVendorProducts();
-        this.pickedProduct = false;
+        this.chosenProduct = false;
         this.hasProducts = false;
-        this.pickedQuantity = false;
+        this.chosenQuantity = false;
         this.msg = 'choose product for vendor';
-        this.pickedVendor = true;
+        this.chosenVendor = true;
         this.generated = false;
-        this.items = []; 
-        this.selectedproducts = []; 
+        this.items = [];
+        this.selectedproducts = [];
       });
-  } // onPickVendor
-  /**
-   * onPickProduct - subscribe to the select change event then
-   * update array containing items.
-   */
-  onPickProduct(): void {
+  } // onChooseVendor
+  onChooseProduct(): void {
     const productSubscription = this.generatorForm
       .get('productid')
       ?.valueChanges.subscribe((val) => {
@@ -162,16 +158,12 @@ export class GeneratorComponent implements OnInit, OnDestroy {
           poid: 0,
           productid: this.selectedProduct?.id,
           qty: val.eoq,
-          //qty: 0,
-          //price: val.costprice ,
           price: val.costprice * val.eoq,
         };
         if (
           this.items.find((item) => item.productid === this.selectedProduct?.id)
         ) {
-          // ignore entry
         } else {
-          //this.generatorForm.get('qtyVal')?.setValue(null);
           this.msg = `${val.eoq} ${this.selectedProduct.name} added!`;
           // add entry
           this.items.push(item);
@@ -179,16 +171,16 @@ export class GeneratorComponent implements OnInit, OnDestroy {
         }
         if (this.items.length > 0) {
           this.hasProducts = true;
-          this.pickedProduct = true;
+          this.chosenProduct = true;
         }
         this.sub = 0.0;
         this.items.forEach((pro) => (this.sub += pro.price));
         this.subWithTax = this.sub * this.tax;
         this.total = this.sub + this.subWithTax;
       });
-    this.formSubscription?.add(productSubscription); // add it as a child, so all can be destroyed together
-  } // onPickProduct
-  onPickQuantity(): void {
+    this.formSubscription?.add(productSubscription); 
+  } // onChooseProduct
+  onChooseQuantity(): void {
     const quantitySubscibtion = this.generatorForm
       .get('qtyVal')
       ?.valueChanges.subscribe((val) => {
@@ -197,7 +189,7 @@ export class GeneratorComponent implements OnInit, OnDestroy {
             if (i.productid === this.selectedProduct?.id) {
               i.qty = this.selectedProduct.eoq;
               i.price = this.selectedProduct.costprice * i.qty;
-              this.pickedQuantity = true;
+              this.chosenQuantity = true;
             }
           });
           this.msg = `${this.selectedProduct.eoq} ${this.selectedProduct.name} added`;
@@ -214,15 +206,15 @@ export class GeneratorComponent implements OnInit, OnDestroy {
             if (i.productid === this.selectedProduct?.id) {
               i.qty = val;
               i.price = this.selectedProduct.costprice * i.qty;
-              this.pickedQuantity = true;
+              this.chosenQuantity = true;
             }
           });
           this.msg = `${val} ${this.selectedProduct.name} added!`;
         }
         if (this.items.length === 0) {
           this.hasProducts = false;
-          this.pickedProduct = false;
-          this.pickedQuantity = false;
+          this.chosenProduct = false;
+          this.chosenQuantity = false;
           this.msg = `No Items`;
         }
 
@@ -236,9 +228,7 @@ export class GeneratorComponent implements OnInit, OnDestroy {
 
     this.formSubscription?.add(quantitySubscibtion);
   }
-  /**
-   * loadVendorProducts - filter for a particular vendor's products
-   */
+
   loadVendorProducts(): void {
     this.vendorproducts$ = this.products$?.pipe(
       map((products) =>
@@ -248,9 +238,7 @@ export class GeneratorComponent implements OnInit, OnDestroy {
       )
     );
   } // loadVendorProducts
-  /**
-   * createReport - create the client side report
-   */
+
   addPO(): void {
     this.generated = false;
     const purchase: PurchaseOrder = {
@@ -260,23 +248,28 @@ export class GeneratorComponent implements OnInit, OnDestroy {
       amount: this.total,
     };
     this.PurchaseOrderService.add(purchase).subscribe({
-      // observer object
+
       next: (purchase: PurchaseOrder) => {
-        // server should be returning purchase with new id
         purchase.id > 0
           ? (this.msg = `PurchaseOrder ${purchase.id} added!`)
           : (this.msg = 'PurchaseOrder not added! - server error');
-        this.reportno = purchase.id;
+        this.purchaseOrderNumber = purchase.id;
       },
       error: (err: Error) =>
         (this.msg = `PurchaseOrder not added! - ${err.message}`),
       complete: () => {
         this.hasProducts = false;
-        this.pickedVendor = false;
-        this.pickedProduct = false;
+        this.chosenVendor = false;
+        this.chosenProduct = false;
         this.generated = true;
-        this.pickedQuantity = false;
+        this.chosenQuantity = false;
+        this.showVendor = false;
       },
     });
   } // addPO()
+
+  viewPdf(): void {
+    window.open(`${PDFURL}${this.purchaseOrderNumber}`, '');
+    this.showVendor = true;
+  } // viewPdf
 } // GeneratorComponent
