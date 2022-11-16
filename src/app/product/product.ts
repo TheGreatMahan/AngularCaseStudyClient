@@ -9,5 +9,5 @@ export interface Product {
     qoh: number;
     qoo: number;
     qrcode: string;
-    qrcodetxt: string;
+    qrcodetxt: string | null | ArrayBuffer;
 }

@@ -85,8 +85,8 @@ export class ProductDetailComponent implements OnInit {
       //Validators.compose([Validators.required])
     );
     this.qrcodetxt = new FormControl(
-      ''
-      //Validators.compose([Validators.required])
+      '',
+      Validators.compose([Validators.required])
     );
     this.productForm = this.builder.group({
       id: this.id,

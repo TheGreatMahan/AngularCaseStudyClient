@@ -34,11 +34,12 @@ mat-list-item:nth-child(even) {
 }
 
 .footer-message {
-  position: absolute;
   bottom: 0;
-  width: 100%;
+  width: 90%;
   height: 2rem;
-  text-align: center;
+  text-align: right;
+  margin:20px auto;
+  font-weight: bold;
   color: brown;
 }
 

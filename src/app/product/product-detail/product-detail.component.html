@@ -67,10 +67,7 @@
 
       </div>
     </mat-expansion-panel>
-  </mat-accordion>
-  <br>
-
-  <mat-accordion>
+    <br>
     <mat-expansion-panel>
       <mat-expansion-panel-header class="my-primary-text">
         <mat-panel-title> Inventory Information </mat-panel-title>
@@ -116,10 +113,27 @@
         </mat-form-field>
       </div>
     </mat-expansion-panel>
+    <br>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header class="my-primary-text">
+        <mat-panel-title>
+          QRCode Information
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-form-field flex>
+        <input matInput placeholder="QRCode Information" type="text" formControlName="qrcodetxt" />
+        <mat-error *ngIf="qrcodetxt.errors && (qrcodetxt.dirty || qrcodetxt.touched)" align="end">
+          <p *ngIf="qrcodetxt.hasError('required')">QRCode is required.</p>
+        </mat-error>
+      </mat-form-field>
+
+      <div style="padding-top:-5%" *ngIf="selectedProduct.qrcode">
+        <p>QRCode:</p>
+        <img style="display:block;" [src]="'data:image/png;base64,' + selectedProduct.qrcode"/>
+      </div>
+    </mat-expansion-panel>
   </mat-accordion>
-
   <br><br>
-
   <div class="mat-pad-sm">
     <span>
       <button mat-raised-button [disabled]="!productForm.valid" type="button" (click)="updateSelectedProduct()"
@@ -128,7 +142,8 @@
       </button>
     </span>
     <span>
-      <button *ngIf="selectedProduct.id" mat-raised-button type="button" (click)="deleted.emit(selectedProduct)" class="delete">
+      <button *ngIf="selectedProduct.id" mat-raised-button type="button" (click)="deleted.emit(selectedProduct)"
+        class="delete">
         Delete
       </button>
     </span>
