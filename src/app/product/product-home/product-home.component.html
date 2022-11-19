@@ -36,6 +36,7 @@
     </div>
   </mat-card-content>
 </mat-card>
+<mat-paginator [length]="length" [pageSize]="pageSize" *ngIf="hideEditForm"></mat-paginator>
 <mat-card *ngIf="!hideEditForm">
   <mat-card-content>
     <app-product-detail [selectedProduct]="product" [vendors]="vendors$ | async" (cancelled)="cancel('cancelled')"

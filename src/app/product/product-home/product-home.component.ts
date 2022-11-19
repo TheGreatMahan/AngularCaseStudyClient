@@ -7,6 +7,7 @@ import { Product } from '@app/product/product';
 import { Vendor } from '@app/vendor/vendor';
 import { VendorService } from '@app/vendor/vendor.service';
 import { ProductService } from '@app/product/product.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   templateUrl: 'product-home.component.html',
@@ -16,10 +17,15 @@ export class ProductHomeComponent implements OnInit, AfterViewInit {
   vendors$?: Observable<Vendor[]>; // for vendor drop down
   products$?: Observable<Product[]>;
   productDataSource$?: Observable<MatTableDataSource<Product>>; // for MatTable
+  // MatPaginator
+  length = 0;
+  pageSize = 5;
+  @ViewChild(MatPaginator) paginator?: MatPaginator;
   // misc.
   product: Product;
   hideEditForm: boolean;
   msg: string;
+  size: number = 0;
   // sort stuff
   displayedColumns: string[] = ['id', 'name', 'vendorid'];
   dataSource: MatTableDataSource<Product> = new MatTableDataSource<Product>();
@@ -51,6 +57,9 @@ export class ProductHomeComponent implements OnInit, AfterViewInit {
         const dataSource = new MatTableDataSource<Product>(products);
         this.dataSource.data = products;
         this.dataSource.sort = this.sort;
+        if (this.paginator !== undefined) {
+          this.dataSource.paginator = this.paginator;
+        }
         return dataSource;
       })
     )),
@@ -63,7 +72,6 @@ export class ProductHomeComponent implements OnInit, AfterViewInit {
       catchError((err) => (this.msg = err.message));
     (this.products$ = this.productService.get()),
       catchError((err) => (this.msg = err.message));
-
   } // ngAfterInit
   select(selectedProduct: Product): void {
     this.product = selectedProduct;
@@ -115,7 +123,7 @@ export class ProductHomeComponent implements OnInit, AfterViewInit {
   /**
    * delete - send product id to service for deletion
    */
-   delete(selectedProduct: Product): void {
+  delete(selectedProduct: Product): void {
     this.productService.delete(selectedProduct.id).subscribe({
       // observer object
       next: (numOfProductsDeleted: number) => {
