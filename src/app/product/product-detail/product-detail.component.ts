@@ -10,6 +10,8 @@ import { Product } from '@app/product/product';
 import { Vendor } from '@app/vendor/vendor';
 import { ValidateDecimal } from '@app/validators/decimal.validator';
 import { ValidateInt } from '@app/validators/int.validator';
+import { DeleteDialogComponent } from '@app/delete-dialog/delete-dialog.component';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-product-detail',
@@ -48,8 +50,14 @@ export class ProductDetailComponent implements OnInit {
   qoo: FormControl;
   qrcode: FormControl;
   qrcodetxt: FormControl;
-  constructor(private builder: FormBuilder) {
-    this.id = new FormControl('', Validators.compose([this.uniqueCodeValidator.bind(this),Validators.required]));
+  constructor(private builder: FormBuilder, private dialog: MatDialog) {
+    this.id = new FormControl(
+      '',
+      Validators.compose([
+        this.uniqueCodeValidator.bind(this),
+        Validators.required,
+      ])
+    );
     this.vendorid = new FormControl(
       '',
       Validators.compose([Validators.required])
@@ -149,4 +157,20 @@ export class ProductDetailComponent implements OnInit {
     }
     return null; // if we make it here there are no product codes
   } // uniqueCodeValidator
+  openDeleteDialog(selectedProduct: Product): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      title: `Delete Product ${this.selectedProduct.id}`,
+      entityname: 'product',
+    };
+    dialogConfig.panelClass = 'customdialog';
+    const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleted.emit(this.selectedProduct);
+      }
+    });
+  } // openDeleteDialog
 }

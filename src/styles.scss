@@ -116,3 +116,16 @@ div > mat-form-field {
   width:90%;
   margin-left:5%;
 }
+
+.customdialog {
+  mat-dialog-container {
+    background-color: white;
+    color: mat-color($my-app-primary);
+    font-weight: bold;
+  }
+}
+#deleteNo,
+#deleteYes {
+  background-color: mat-color($my-app-primary);
+  color: white;
+}
