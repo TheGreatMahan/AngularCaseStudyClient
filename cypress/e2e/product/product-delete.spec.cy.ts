@@ -12,6 +12,9 @@ describe('product delete test', () => {
   it('clicks the delete button', () => {
     cy.get('button').contains('Delete').click();
   });
+  it("clicks the dialog's Yes button", () => {
+    cy.get('button').contains('Yes').click();
+  });
   it('confirms delete', () => {
     cy.contains('deleted!');
   });
