@@ -5,4 +5,5 @@ export interface PurchaseOrder {
     vendorid: number;
     amount: number;
     items: PurchaseOrderLineItem[];
+    datecreated?: string;
 }

@@ -43,4 +43,9 @@ export class GenericHttpService<T> {
     window.alert(status);
     return throwError(() => status);
   }
+  public getSome(id: number): Observable<T[]> {
+    return this.httpClient
+      .get<T[]>(`${BASEURL}${this.entity}/${id}`)
+      .pipe(retry(2), catchError(this.handleError));
+  } // getSome
 } // GenericHttpService

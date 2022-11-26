@@ -1,0 +1,116 @@
+<mat-card>
+  <mat-card-header layout="row">
+    <img src="../../../assets/images/logo.jpg" class="logo-image">
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="viewerForm" novalidate>
+      <div layout="row">
+        <mat-form-field flex>
+          <mat-select placeholder="Choose Vendor" formControlName="vendorid">
+            <mat-option *ngFor="let vendor of vendors$ | async" [value]="vendor">
+              {{ vendor.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="pickedVendor" layout="row">
+        <mat-form-field flex>
+          <mat-select placeholder="Choose PurchaseOrder" formControlName="purchaseorderid"
+            (change)="onPickPurchaseOrder()">
+            <mat-option *ngFor="let purchaseorder of purchaseorders$ | async" [value]="purchaseorder">
+              {{ purchaseorder.id }} - {{ purchaseorder.datecreated }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <br />
+      <div *ngIf="hasPurchaseOrder" class="row">
+        <div style="text-align:center">
+          <h2 style="margin-top: 3%">
+            Purchase Order: {{this.purchaseorderno}}
+          </h2>
+          <h4>
+            created on: {{this.datecreated}}
+          </h4>
+        </div>
+        <table>
+          <tr style="font-weight: bold; background-color: #eeeeee">
+            <td style="
+                      text-align: center;
+                      width: 20vw;
+                      padding-top: 2vh;
+                      padding-bottom: 2vh;
+                    ">
+              Product
+            </td>
+            <td style="
+                      text-align: center;
+                      width: 60vw;
+                      padding-top: 2vh;
+                      padding-bottom: 2vh;
+                    ">
+              Qty
+            </td>
+            <td style="
+                      text-align: center;
+                      width: 60vw;
+                      padding-top: 2vh;
+                      padding-bottom: 2vh;
+              ">
+              Cost
+            </td>
+            <td style="
+                      text-align: center;
+                      width: 20vw;
+                      padding-top: 2vh;
+                      padding-bottom: 2vh;
+                    ">
+              Extended
+            </td>
+          </tr>
+          <tr *ngFor="let item of items">
+            <td class="text-left" style="padding-top: 1vh; padding-bottom: 1vh; text-align: center">
+              {{ 
+                productMap.get(item.productid)
+              }}
+            </td>
+            <td class="text-center" style="padding-top: 1vh; padding-bottom: 1vh; text-align: center">
+              {{ item.qty }}
+            </td>
+            <td class="text-center" style="padding-top: 1vh; padding-bottom: 1vh; text-align: center">
+              {{ item.price / item.qty | currency: "USD":"symbol":"1.2-2" }}
+            </td>
+            <td style="padding-top: 1vh; padding-bottom: 1vh; text-align: right">
+              {{ item.price | currency: "USD":"symbol":"1.2-2" }}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td style="text-align: center">Sub:</td>
+            <td style="font-weight: 600; text-align: right">
+              {{ sub | currency: "USD":"symbol":"1.2-2" }}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td style="text-align: center">Tax:</td>
+            <td style="font-weight: 600; text-align: right">
+              {{ tax | currency: "USD":"symbol":"1.2-2" }}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td style="text-align: center">Total:</td>
+            <td style="font-weight: 600; text-align: right; background-color: yellow">
+              {{ total | currency: "USD":"symbol":"1.2-2" }}
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div style="text-align: center; margin-top:2%" *ngIf="hasPurchaseOrder">
+        <button mat-raised-button type="submit" (click)="viewPdf()">View PDF</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+<p class="footer-message">{{ msg }}</p>
